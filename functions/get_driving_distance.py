@@ -31,6 +31,6 @@ def get_driving_distance(dict):
 
                     distance = int(route_1["duration"]/60)
 
-                    distance_list.append(f"{person}: {distance} Minutes")
+                    distance_list.append(f"{person}: {distance} Mins")
 
     return distance_list
