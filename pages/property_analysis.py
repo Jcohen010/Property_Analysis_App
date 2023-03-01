@@ -76,8 +76,8 @@ if mls_id:
         st.header(f"Information")
         st.image(photo)
         
-        for info in results['data']['results'][0]['description']:
-            st.code(info)
+        for label, info in results['data']['results'][0]['description'].items():
+            st.code(f"{label} : {info}")
         
     with col3:
         st.header(f"Distance")
