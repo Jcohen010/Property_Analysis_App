@@ -1,14 +1,22 @@
 import streamlit as st
 import pandas as pd
+import numpy_financial as npf
+from streamlit_folium import st_folium, folium_static
 from functions.get_property_property import get_property
 from functions.generate_raw_coordinates_dict import generate_raw_coordinates_dict
 from functions.get_driving_distance import get_driving_distance
+from functions.generate_folium_map import generate_folium_map
+
+
 
 
 ### VARIABLES ###
 dollarsformat = "${:,.2f}"
-justin_income = 5400
-syd_income = 4800
+
+income_dict = {
+    "Justin" : 5400,
+    "Syd" : 4800
+}
 
 coordinates_dict = {
         'coordinates' : [
@@ -57,6 +65,10 @@ if mls_id:
     coordinates_df = pd.DataFrame(map_container)
     distance_list = get_driving_distance(coordinates_dict)
 
+    
+    map = generate_folium_map(coordinates_df=coordinates_df, coordinates_dict=coordinates_dict)
+
+    st_folium(map, width=700)
 
     
     col1, col2, col3 = st.columns([2,2,2])
@@ -65,10 +77,26 @@ if mls_id:
         price = results['data']['results'][0]['list_price']
 
         st.header("Financials")
-        Price = st.text_input(label="Price", value=dollarsformat.format(price))
-        Percent_Down = st.slider("Percentage Down Payment (%)", min_value=0, max_value=100, value=20)
-        DownPayment = st.text_input(label="Downpayment", value=dollarsformat.format(price*(Percent_Down/100)))
-        LoanAmount = st.text_input(label="Loan Amount", value=dollarsformat.format(price*(1-(Percent_Down/100))))
+        Price = st.text_input(label="Price", value=dollarsformat.format(price), help="This field may be changed; all other 'Financials' fields will update to reflect the change in purchase price.")
+        price_input = float(Price.replace("$","").replace(",","").replace(".",""))/100
+        PercentDown = st.slider("Percentage Down Payment (%)", min_value=0, max_value=100, value=20)
+        DownPayment = st.text_input(label="Downpayment", value=dollarsformat.format(price_input*(PercentDown/100)))
+        st.markdown("#")
+        st.markdown("#### Mortgage Info")
+        loanamount = price_input*(1-(PercentDown/100))
+        LoanAmount = st.text_input(label="Loan Amount", value=dollarsformat.format(price_input*(1-(PercentDown/100))))
+        LoanTerm = st.slider("Loan Term (Years)", min_value=5, max_value=30, value=30, step=5)
+        InterestRate = st.slider("Interest Rate (%)", min_value=float(0.000), max_value=float(10), value=6.0, step=float(.1))
+        monthlypayment = -1*npf.pmt(float(InterestRate/100)/12, LoanTerm*12, loanamount)
+        st.markdown("###### Monthly Payment")
+        MonthlyPayment = st.code(dollarsformat.format(monthlypayment), language="html")
+        st.markdown("#")
+        st.markdown("#### Percentage of Income")
+        for person, income in income_dict.items():
+            percentage_of_income = 100*(monthlypayment / income)
+            st.code(f"{int(percentage_of_income)}% of {person}'s Income" )
+
+
 
     with col2:
         photo = results['data']['results'][0]['primary_photo']['href']
@@ -76,7 +104,7 @@ if mls_id:
         st.header(f"Information")
         st.image(photo)
         
-        for label, info in results['data']['results'][0]['description'].items():
+        for label, info in sorted(results['data']['results'][0]['description'].items()):
             st.code(f"{label} : {info}")
         
     with col3:
@@ -84,7 +112,6 @@ if mls_id:
         for item in distance_list:
             st.code(item)
     
-    st.map(coordinates_df)
 
 else:
     st.warning("Please enter an MLS ID")
