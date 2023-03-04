@@ -8,14 +8,17 @@ from functions.get_driving_distance import get_driving_distance
 from functions.generate_folium_map import generate_folium_map
 
 
-
-
 ### VARIABLES ###
 dollarsformat = "${:,.2f}"
 
 income_dict = {
     "Justin" : 5400,
     "Syd" : 4800
+}
+
+expenses_dict = {
+    "Justin" : 2394,
+    "Syd" : 1775
 }
 
 coordinates_dict = {
