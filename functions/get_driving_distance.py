@@ -4,19 +4,20 @@ def get_driving_distance(dict):
     import pandas as pd
     from datetime import timedelta
     import datetime
+    global propertylat, propertylon
 
     distance_list = []
 
-    for coord in dict['coordinates']:
-        for place in coord:
-            if place == 'property':
-                property = place
-                for place in coord.values():
-                    propertylat = place['lat']
-                    propertylon = place['lon']
+    for category, dictionary in dict['coordinates'].items():
+        for item in dictionary:
+            for place, coordinatepair in item.items():
+                if place == 'property':
+                    property = place
+                propertylat = coordinatepair['lat']
+                propertylon = coordinatepair['lon']
 
     for category, dictionary in dict['coordinates'].items():
-        for item in category:
+        for item in dictionary:
             for place, coordinatepair in item.items():
                 if place != 'property':
                     person = place

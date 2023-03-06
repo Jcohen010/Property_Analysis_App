@@ -1,8 +1,9 @@
 def generate_raw_coordinates_dict(dict):
     maps_container = []
 
-    for item in dict['coordinates']:
-        for place in item.values():
-            maps_container.append(place)
+    for category, dictionary in dict['coordinates'].items():
+        for item in dictionary:
+            for place, coordinatespair in item.items():
+                maps_container.append(coordinatespair)
 
     return maps_container

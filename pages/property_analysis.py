@@ -22,7 +22,8 @@ expenses_dict = {
 }
 
 coordinates_dict = {
-        'coordinates' : [
+        'coordinates' : {
+            'home' : [
             {'Justin' : {
                 'lat' : 41.33115142971489,
                 'lon' : -73.18608590196374
@@ -30,7 +31,8 @@ coordinates_dict = {
             {'Syd' : {
                 'lat' : 41.331497982773655,
                 'lon' : -73.44446180227342
-            }},
+            }}],
+            'work' : [
             {'Curtis Packaging' : {
                 'lat' : 41.4076328155581, 
                 'lon' : -73.26196805970572
@@ -43,8 +45,7 @@ coordinates_dict = {
                 'lat' : 41.36578270632403,
                 'lon' : -73.61497920268121
             }}
-
-    ]  
+    ]}
 }
 st.title("Property Analysis App")
 
@@ -58,14 +59,15 @@ if mls_id:
     # Structure coordinate data
     property_coordinates = results['data']['results'][0]['location']['address']['coordinate']
 
-    property_coordinates_dict = {
+    property_coordinates_dict = [{
     'property' : property_coordinates
-    }
+    }]
 
     # Add property coordinates to existing dict
-    coordinates_dict['coordinates'].append(property_coordinates_dict)
+    coordinates_dict['coordinates']['property'] = property_coordinates_dict
     map_container = generate_raw_coordinates_dict(coordinates_dict)
     coordinates_df = pd.DataFrame(map_container)
+    st.write(coordinates_df)
     distance_list = get_driving_distance(coordinates_dict)
 
     
