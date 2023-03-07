@@ -110,7 +110,8 @@ if mls_id:
         st.image(photo)
         
         for label, info in sorted(results['data']['results'][0]['description'].items()):
-            st.code(f"{label} : {info}")
+            if info != None:
+                st.code(f"{label} : {info}")
         
     with col3:
         st.header(f"Distance")
@@ -120,5 +121,7 @@ if mls_id:
 
 else:
     st.warning("Please enter an MLS ID")
+
+st.write(st.session_state)
 
 
