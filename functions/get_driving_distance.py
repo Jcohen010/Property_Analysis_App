@@ -4,7 +4,7 @@ def get_driving_distance(dict):
     import pandas as pd
     from datetime import timedelta
     import datetime
-    global propertylat, propertylon
+    global propertylat, propertylon, person
 
     distance_list = []
 
