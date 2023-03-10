@@ -21,32 +21,35 @@ expenses_dict = {
     "Syd" : 1775
 }
 
-coordinates_dict = {
-        'coordinates' : {
-            'home' : [
-            {'Justin' : {
-                'lat' : 41.33115142971489,
-                'lon' : -73.18608590196374
-                        }},
-            {'Syd' : {
-                'lat' : 41.331497982773655,
-                'lon' : -73.44446180227342
-            }}],
-            'work' : [
-            {'Curtis Packaging' : {
-                'lat' : 41.4076328155581, 
-                'lon' : -73.26196805970572
-            }},
-            {'Danbury Ice' : {
-                'lat' : 41.395522684003225, 
-                'lon' : -73.45088991552578
-            }},
-            {'Brewster Ice' : {
-                'lat' : 41.36578270632403,
-                'lon' : -73.61497920268121
-            }}
-    ]}
-}
+if 'coordinates_dict' in st.session_state:
+    coordinates_dict = st.session_state.coordinates_dict
+
+# coordinates_dict = {
+#         'coordinates' : {
+#             'home' : [
+#             {'Justin' : {
+#                 'lat' : 41.33115142971489,
+#                 'lon' : -73.18608590196374
+#                         }},
+#             {'Syd' : {
+#                 'lat' : 41.331497982773655,
+#                 'lon' : -73.44446180227342
+#             }}],
+#             'work' : [
+#             {'Curtis Packaging' : {
+#                 'lat' : 41.4076328155581, 
+#                 'lon' : -73.26196805970572
+#             }},
+#             {'Danbury Ice' : {
+#                 'lat' : 41.395522684003225, 
+#                 'lon' : -73.45088991552578
+#             }},
+#             {'Brewster Ice' : {
+#                 'lat' : 41.36578270632403,
+#                 'lon' : -73.61497920268121
+#             }}
+#     ]}
+# }
 st.title("Property Analysis App")
 
 mls_id = st.text_input('Type the MLS Number of the property.')
@@ -67,14 +70,12 @@ if mls_id:
     coordinates_dict['coordinates']['property'] = property_coordinates_dict
     map_container = generate_raw_coordinates_dict(coordinates_dict)
     coordinates_df = pd.DataFrame(map_container)
-    st.write(coordinates_df)
     distance_list = get_driving_distance(coordinates_dict)
 
     
     map = generate_folium_map(coordinates_df=coordinates_df, coordinates_dict=coordinates_dict)
 
-    st_folium(map, width=700)
-
+    st_folium(map, width=700, height=800)
     
     col1, col2, col3 = st.columns([2,2,2])
 
@@ -122,6 +123,5 @@ if mls_id:
 else:
     st.warning("Please enter an MLS ID")
 
-st.write(st.session_state)
 
 
