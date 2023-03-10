@@ -10,6 +10,11 @@ def generate_folium_map(coordinates_df, coordinates_dict):
                 iframe = folium.IFrame(f"{place}")
                 popup = folium.Popup(iframe, min_width=100, max_width=100)
 
-                folium.Marker(location=[coordinate_pair['lat'],coordinate_pair['lon']], popup = popup, c=place).add_to(map)
-
+                if category == 'home':
+                    folium.Marker(location=[coordinate_pair['lat'],coordinate_pair['lon']], popup = popup, c=place, icon=folium.Icon(color='purple')).add_to(map)
+                elif category == 'work':
+                    folium.Marker(location=[coordinate_pair['lat'],coordinate_pair['lon']], popup = popup, c=place, icon=folium.Icon(color='blue')).add_to(map)
+                elif category == 'property':
+                    folium.Marker(location=[coordinate_pair['lat'],coordinate_pair['lon']], popup = popup, c=place, icon=folium.Icon(color='green')).add_to(map)
+                    
     return map
