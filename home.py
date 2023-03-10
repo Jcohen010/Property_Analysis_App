@@ -64,4 +64,3 @@ for i in range(st.session_state.n_rows):
     
     
 st.session_state.coordinates_dict = python_coordinates_dict
-st.session_state
