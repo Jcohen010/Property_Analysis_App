@@ -24,6 +24,9 @@ expenses_dict = {
 if 'coordinates_dict' in st.session_state:
     coordinates_dict = st.session_state.coordinates_dict
 
+else:
+    coordinates_dict = {}
+
 # coordinates_dict = {
 #         'coordinates' : {
 #             'home' : [
